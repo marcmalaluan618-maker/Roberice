@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roberice POS & Inventory System</title>
+</head>
+<body>
+  <script>
+    const userJson = sessionStorage.getItem('roberice_logged_user');
+    if (userJson) {
+      const user = JSON.parse(userJson);
+      if (user.role === 'admin') {
+        window.location.href = 'dashboard.html';
+      } else {
+        window.location.href = 'pos.html';
+      }
+    } else {
+      window.location.href = 'login.html';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Products & Pricing - Roberice POS & Inventory System</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <div class="app-container">
+    <main class="main-wrapper">
+      <div class="page-container">
+        
+        <div class="page-header">
+          <div class="page-title">
+            <h2>Products & Pricing Management</h2>
+            <p>Add, edit, or configure rice varieties, wholesale sack prices, retail kg prices, and low-stock thresholds.</p>
+          </div>
+          <button class="btn btn-primary" id="btnOpenAddProduct">
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+            Add New Rice Variety
+          </button>
+        </div>
+
+        <div class="card">
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Rice Variety</th>
+                  <th>Category</th>
+                  <th>Sack Price (₱)</th>
+                  <th>Kg Price (₱)</th>
+                  <th>Kg/Sack Standard</th>
+                  <th>Current Stock</th>
+                  <th>Low-Stock Threshold</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="productsTableBody">
+                <!-- Rendered via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Add/Edit Product Modal -->
+  <div class="modal-overlay" id="modalProductForm">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="productModalTitle">Add New Rice Variety</h3>
+        <button class="modal-close" onclick="closeModal('modalProductForm')">&times;</button>
+      </div>
+      <form id="productForm">
+        <input type="hidden" id="prodEditId" value="">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="prodName">Rice Variety Name</label>
+            <input type="text" id="prodName" class="form-control" placeholder="e.g. Sinandomeng Special" required>
+          </div>
+
+          <div class="form-group">
+            <label for="prodCategory">Category / Grain Type</label>
+            <input type="text" id="prodCategory" class="form-control" placeholder="e.g. Premium White, Aromatic, Regular Milled" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="prodPriceSack">Price per Sack (₱)</label>
+              <input type="number" id="prodPriceSack" class="form-control" placeholder="0.00" step="0.01" min="0" required>
+            </div>
+            <div class="form-group">
+              <label for="prodPriceKg">Price per Kg (₱)</label>
+              <input type="number" id="prodPriceKg" class="form-control" placeholder="0.00" step="0.01" min="0" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="prodKgPerSack">Standard Kg per Sack</label>
+              <input type="number" id="prodKgPerSack" class="form-control" value="50" min="1" required>
+            </div>
+            <div class="form-group">
+              <label for="prodThresholdKg">Low-Stock Alert Threshold (Total Kg)</label>
+              <input type="number" id="prodThresholdKg" class="form-control" value="200" min="1" required>
+            </div>
+          </div>
+
+          <div class="form-row" id="initialStockRow">
+            <div class="form-group">
+              <label for="prodInitialSacks">Initial Sacks Stock</label>
+              <input type="number" id="prodInitialSacks" class="form-control" value="10" min="0">
+            </div>
+            <div class="form-group">
+              <label for="prodInitialKg">Initial Loose Kg Stock</label>
+              <input type="number" id="prodInitialKg" class="form-control" value="0" min="0" step="0.1">
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modalProductForm')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Product</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/products.js"></script>
+</body>
+</html>

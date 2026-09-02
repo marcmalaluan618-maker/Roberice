@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transaction History - Roberice POS & Inventory System</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <div class="app-container">
+    <main class="main-wrapper">
+      <div class="page-container">
+        
+        <div class="page-header">
+          <div class="page-title">
+            <h2>Transaction History</h2>
+            <p id="txnPageSubtitle">View sales records and customer transaction details.</p>
+          </div>
+        </div>
+
+        <!-- Shift / Filter Summary Cards -->
+        <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 20px;">
+          <div class="stat-card">
+            <div class="stat-info">
+              <span class="stat-label">Transactions Count</span>
+              <span class="stat-value" id="summaryCount">0</span>
+            </div>
+            <div class="stat-icon-box blue">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-info">
+              <span class="stat-label">Total Revenue</span>
+              <span class="stat-value" id="summaryTotal">₱0.00</span>
+            </div>
+            <div class="stat-icon-box green">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-info">
+              <span class="stat-label">Cash Collected</span>
+              <span class="stat-value" id="summaryCash">₱0.00</span>
+            </div>
+            <div class="stat-icon-box purple">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <!-- Filter Controls -->
+          <div class="filter-bar">
+            <div class="search-box">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+              <input type="text" id="searchTxn" class="form-control" placeholder="Search by Txn ID, cashier, or item...">
+            </div>
+
+            <div class="filter-actions">
+              <select id="filterCashier" class="form-select" style="width: 170px;">
+                <option value="all">All Cashiers</option>
+              </select>
+
+              <select id="filterMethod" class="form-select" style="width: 150px;">
+                <option value="all">All Methods</option>
+                <option value="Cash">Cash</option>
+                <option value="GCash">GCash</option>
+                <option value="Bank Transfer">Bank Transfer</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Transactions Table -->
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Txn ID</th>
+                  <th>Date / Time</th>
+                  <th>Cashier</th>
+                  <th>Items Purchased</th>
+                  <th>Payment Method</th>
+                  <th>Total Amount</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="txnTableBody">
+                <!-- Rendered via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Receipt Modal -->
+  <div class="modal-overlay" id="modalReceipt">
+    <div class="modal-card" style="max-width: 400px;">
+      <div class="modal-header">
+        <h3>Transaction Receipt</h3>
+        <button class="modal-close" onclick="closeModal('modalReceipt')">&times;</button>
+      </div>
+      <div class="modal-body printable-area">
+        <div class="receipt-box" id="receiptContent">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('modalReceipt')">Close</button>
+        <button class="btn btn-primary" onclick="window.print()">Print Receipt</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/transactions.js"></script>
+</body>
+</html>

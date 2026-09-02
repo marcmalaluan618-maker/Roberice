@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Roberice POS & Inventory System</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="login-screen">
+
+  <div class="login-card">
+    <div class="login-brand">
+      <div class="brand-icon brand-logo">
+        <img src="assets/roberice-logo.png" alt="RBR Rice Retailing logo">
+      </div>
+      <h2 style="font-size:22px;font-weight:700;margin-top:10px;">Roberice Store</h2>
+      <p style="font-size:13px;color:var(--text-muted);">POS & Inventory Management System</p>
+    </div>
+
+    <div id="loginAlert" style="display:none;padding:10px 14px;border-radius:var(--radius-md);font-size:12px;margin-bottom:16px;background:var(--danger-bg);color:var(--danger-text);border:1px solid #e7a5a5;">
+      Invalid username or password.
+    </div>
+
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" class="form-control" placeholder="Enter your username" required autofocus>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
+      </div>
+
+      <button type="submit" id="btnLogin" class="btn btn-primary btn-block btn-lg" style="margin-top:8px;">
+        Sign In
+      </button>
+    </form>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const loginForm = document.getElementById('loginForm');
+      const loginAlert = document.getElementById('loginAlert');
+      const btnLogin = document.getElementById('btnLogin');
+
+      loginForm.addEventListener('submit', async e => {
+        e.preventDefault();
+
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value;
+
+        loginAlert.style.display = 'none';
+        btnLogin.disabled = true;
+        btnLogin.textContent = 'Signing In...';
+
+        try {
+          const response = await fetch('api/login.php', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              username,
+              password
+            })
+          });
+
+          const result = await response.json();
+
+          if (!result.success) {
+            loginAlert.textContent = result.message || 'Invalid username or password.';
+            loginAlert.style.display = 'block';
+            return;
+          }
+
+          sessionStorage.setItem(
+            'roberice_logged_user',
+            JSON.stringify(result.user)
+          );
+
+          if (result.user.role === 'admin') {
+            window.location.href = 'dashboard.html';
+          } else {
+            window.location.href = 'pos.html';
+          }
+
+        } catch (error) {
+          console.error('Login error:', error);
+          loginAlert.textContent = 'Unable to connect to the server.';
+          loginAlert.style.display = 'block';
+        } finally {
+          btnLogin.disabled = false;
+          btnLogin.textContent = 'Sign In';
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

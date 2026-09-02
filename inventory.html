@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Inventory - Roberice POS & Inventory System</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <div class="app-container">
+    <main class="main-wrapper">
+      <div class="page-container">
+
+        <div class="page-header">
+          <div class="page-title">
+            <h2>Manage Inventory</h2>
+            <p>Admin control panel for restocking, physical count corrections, and damage reporting.</p>
+          </div>
+
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-primary" id="btnOpenRestockModal">
+              + Restock
+            </button>
+
+            <button class="btn btn-secondary" id="btnOpenAdjustModal">
+              Adjust Stock
+            </button>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:24px;">
+          <div class="card-title">Current Rice Stock Levels</div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Variety Name</th>
+                  <th>Sacks Stock</th>
+                  <th>Loose Kg</th>
+                  <th>Total Stock</th>
+                  <th>Low-Stock Alert Threshold</th>
+                  <th>Stock Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+
+              <tbody id="inventoryManageTable"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Stock Adjustment History</div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Rice Variety</th>
+                  <th>Adjustment Type</th>
+                  <th>Quantity Shift</th>
+                  <th>Reason / Note</th>
+                  <th>Adjusted By</th>
+                </tr>
+              </thead>
+
+              <tbody id="adjustmentLogTable"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+
+  <!-- RESTOCK MODAL -->
+  <div class="modal-overlay" id="modalRestock">
+    <div class="modal-card">
+
+      <div class="modal-header">
+        <h3>Restock Inventory</h3>
+        <button class="modal-close" onclick="closeModal('modalRestock')">&times;</button>
+      </div>
+
+      <form id="restockForm">
+
+        <div class="modal-body">
+
+          <div class="form-group">
+            <label for="restockProductSelect">Select Rice Variety</label>
+            <select id="restockProductSelect" class="form-select" required></select>
+          </div>
+
+          <div class="form-row">
+
+            <div class="form-group">
+              <label for="restockSacks">Sacks Amount</label>
+              <input
+                type="number"
+                id="restockSacks"
+                class="form-control"
+                value="0"
+                min="0"
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="restockKg">Kilograms (Kg) Amount</label>
+              <input
+                type="number"
+                id="restockKg"
+                class="form-control"
+                value="0"
+                min="0"
+                step="0.1"
+              >
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            onclick="closeModal('modalRestock')">
+            Cancel
+          </button>
+
+          <button type="submit" class="btn btn-primary">
+            Save Restock
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ADJUSTMENT MODAL -->
+  <div class="modal-overlay" id="modalStockAdjust">
+    <div class="modal-card">
+
+      <div class="modal-header">
+        <h3>Adjust Inventory Stock</h3>
+        <button class="modal-close" onclick="closeModal('modalStockAdjust')">&times;</button>
+      </div>
+
+      <form id="adjustStockForm">
+
+        <div class="modal-body">
+
+          <div class="form-group">
+            <label for="adjustProductSelect">Select Rice Variety</label>
+            <select id="adjustProductSelect" class="form-select" required></select>
+          </div>
+
+          <div class="form-group">
+            <label for="adjustType">Adjustment Type</label>
+
+            <select id="adjustType" class="form-select" required>
+              <option value="correction">
+                Inventory Correction (Set / Adjust Count)
+              </option>
+
+              <option value="spoilage">
+                Damage / Spoilage (Remove Damaged Stock)
+              </option>
+            </select>
+          </div>
+
+          <div class="form-row">
+
+            <div class="form-group">
+              <label for="adjustSacks">Sacks Amount</label>
+              <input
+                type="number"
+                id="adjustSacks"
+                class="form-control"
+                value="0"
+                min="0"
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="adjustKg">Kilograms (Kg) Amount</label>
+              <input
+                type="number"
+                id="adjustKg"
+                class="form-control"
+                value="0"
+                min="0"
+                step="0.1"
+              >
+            </div>
+
+          </div>
+
+          <div class="form-group">
+            <label for="adjustNote">Reason / Notes</label>
+
+            <textarea
+              id="adjustNote"
+              class="form-control"
+              rows="3"
+              placeholder="Enter reason for inventory correction or damaged stock..."
+              required>
+            </textarea>
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            onclick="closeModal('modalStockAdjust')">
+            Cancel
+          </button>
+
+          <button type="submit" class="btn btn-primary">
+            Save Adjustment
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+
+  <script src="js/data.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/inventory.js"></script>
+
+</body>
+</html>
